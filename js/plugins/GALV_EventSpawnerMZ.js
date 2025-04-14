@@ -221,7 +221,7 @@ function hasCommands(eventId) {
 				console.log(`Using event ${eventId}:${event.name} on page ${i}`);
 				return true;
 			}
-			else{
+			else {
 				console.log(`\n-----------------------\nEvent '${eventId}:${event.name}' is empty\n-----------------------\n`);
 				return false
 			}
@@ -273,19 +273,19 @@ const specialEventIds = [13, 160, 128, 71, 100, 101, 106, 107, 108, 129, 82, 119
 
 function resetAllowedEvents() {
 	console.log("Events reloaded")
-	Galv.SPAWN.allowedEvents = [13,1,2,3,4,5,6,7,8,9,10,11,12,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,151,154,153,152,155,156,158,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,102,103,104,105,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,157,150,149,148,147,63,64,65,66,67,68,69,70,71,72,73,74,75,77,76,78,79,80,81,82,83,109,110,111,112,113,114,119,115,117,118,120,121,122,123,124,125,126,127,132,129,130,157,156,134,157,159,160,161,162,163,164,165,166,167,168,169,170,171,172,174,175,176]
+	Galv.SPAWN.allowedEvents = [13, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 151, 154, 153, 152, 155, 156, 158, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 102, 103, 104, 105, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 157, 150, 149, 148, 147, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 77, 76, 78, 79, 80, 81, 82, 83, 109, 110, 111, 112, 113, 114, 119, 115, 117, 118, 120, 121, 122, 123, 124, 125, 126, 127, 132, 129, 130, 157, 156, 134, 157, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 174, 175, 176]
 }
 
 function getEventId(eventId) {
 	console.log(`Get id from '${Galv.SPAWN.allowedEvents.length}' events`)
-	if (specialEventIds.includes(eventId)) {
+	if (specialEventIds.includes(eventId) && hasCommands(eventId)) {
 		// console.log(`Special event '${eventId}'`);
 		return eventId;
 	}
 
-	if (Galv.SPAWN.allowedEvents.includes(eventId)) {
+	if (!specialEventIds.includes(eventId) && Galv.SPAWN.allowedEvents.includes(eventId)) {
 		// console.log(`Allowed event '${eventId}'`);
-		Galv.SPAWN.allowedEvents = Galv.SPAWN.allowedEvents.filter(id=>id!=eventId);
+		Galv.SPAWN.allowedEvents = Galv.SPAWN.allowedEvents.filter(id => id != eventId);
 		return eventId;
 	}
 
@@ -297,7 +297,12 @@ function getEventId(eventId) {
 
 	Galv.SPAWN.allowedEvents.sort(() => Math.random() - 0.5)
 
-	return Galv.SPAWN.allowedEvents.pop()
+	const lastEvent = Galv.SPAWN.allowedEvents.pop()
+
+	if (specialEventIds.includes(lastEvent)) {
+		Galv.SPAWN.allowedEvents.push(lastEvent);
+	}
+	return lastEvent;
 }
 
 Galv.SPAWN.event = function (eventId, type, data, overlap, save, targetId = 0) {
