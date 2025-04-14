@@ -242,8 +242,34 @@ function hasCommands(eventId) {
  * 106 - mel door
  * 107 - mel door
  * 108 - mel door
+ * 129 - gold rose door
+ * 82 - sun/catgirl
+ * 119 - himiko
+ * 165 - dementia
+ * 46 - clay
+ * 166 - penny girl
+ * 164 - toshi
+ * 144 - artichoke girls
+ * 130 - ayumu
+ * 99 - ori/chiyo
+ * 174 - sitar cat
+ * 103 - big clown
+ * 111 - @_@ girl
+ * 112 - @_@ normal girl
+ * 72 - sugar
+ * 149 - anemia
+ * 17 - small white girl
+ * 17 - small black girl
+ * 115 - #idiot girl
+ * 62 - moon king
+ * 122 - faceless guy
+ * 162 - shroom guy
+ * 57 - angel
+ * 74 - froggy
+ * 161 - jomon
+ * 171 - boring story mech girl
  */
-const specialEventIds = [13, 160, 128, 71, 100, 101, 106, 107, 108];
+const specialEventIds = [13, 160, 128, 71, 100, 101, 106, 107, 108, 129, 82, 119, 165, 46, 166, 164, 144, 130, 99, 103, 111, 112, 72, 149, 17, 16, 115, 62, 122, 162, 57, 74, 161, 171];
 
 function resetAllowedEvents() {
 	console.log("Events reloaded")
