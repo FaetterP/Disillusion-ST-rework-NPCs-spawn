@@ -246,6 +246,7 @@
 }
 .sv-toast:hover { border-color: #5b95ee; }
 .sv-toast-mark { font-size: 17px; color: #7fc093; }
+.sv-toast-step .sv-toast-mark { color: #5b95ee; }
 .sv-toast-text { font-size: 17px; letter-spacing: .08em; color: #eef3ff; white-space: nowrap; text-shadow: 0 0 8px rgba(59, 123, 220, .6); }
 @keyframes svToastIn  { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
 @keyframes svToastOut { from { opacity: 1; } to { opacity: 0; } }

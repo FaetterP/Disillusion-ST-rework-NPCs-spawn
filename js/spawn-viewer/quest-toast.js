@@ -13,11 +13,14 @@
     var known = {};
     var pending = [];
 
-    function completedIds() {
+    function snapshot() {
         try {
             var result = {};
             quests.forEach(function (q) {
-                if (SV.questProgress.stateOf(q).complete) result[q.id] = true;
+                var st = SV.questProgress.stateOf(q);
+                var steps = {};
+                st.steps.forEach(function (s, i) { steps[st.keys[i]] = !!st.done[i]; });
+                result[q.id] = { complete: !!st.complete, locked: !!st.locked, steps: steps };
             });
             return result;
         } catch (err) {
@@ -25,11 +28,37 @@
         }
     }
 
+    function merge(prev, cur) {
+        var steps = {};
+        var key;
+        for (key in prev.steps) steps[key] = prev.steps[key];
+        for (key in cur.steps) {
+            steps[key] = (prev.steps[key] === undefined) ? cur.steps[key] : (prev.steps[key] || cur.steps[key]);
+        }
+        return { complete: prev.complete || cur.complete, locked: cur.locked, steps: steps };
+    }
+
+    function stepJustDone(prev, cur) {
+        for (var key in cur.steps) {
+            if (cur.steps[key] && prev.steps[key] === false) return true;
+        }
+        return false;
+    }
+
+    function enqueue(id, kind) {
+        if (kind === 'complete') {
+            pending = pending.filter(function (p) { return p.id !== id; });
+        } else if (pending.some(function (p) { return p.id === id; })) {
+            return;
+        }
+        pending.push({ id: id, kind: kind });
+    }
+
     function check() {
         var token = game.sessionToken();
         if (!token) return;
 
-        var now = completedIds();
+        var now = snapshot();
         if (!now) return;
 
         if (token !== lastToken) {
@@ -41,14 +70,24 @@
         }
 
         quests.forEach(function (q) {
-            if (now[q.id] && !known[q.id]) {
-                known[q.id] = true;
-                pending.push(q.id);
+            var cur = now[q.id];
+            var prev = known[q.id];
+            if (!prev) {
+                known[q.id] = cur;
+                return;
             }
+
+            if (cur.complete && !prev.complete) {
+                enqueue(q.id, 'complete');
+            } else if (!prev.locked && !cur.locked && !cur.complete && stepJustDone(prev, cur)) {
+                enqueue(q.id, 'step');
+            }
+
+            known[q.id] = merge(prev, cur);
         });
 
         if (pending.length && game.isMapScene()) {
-            pending.splice(0).forEach(showToast);
+            pending.splice(0).forEach(function (p) { showToast(p.id, p.kind); });
         }
     }
 
@@ -70,14 +109,14 @@
         SV.viewer.showTab('quests');
     }
 
-    function showToast(id) {
+    function showToast(id, kind) {
         var quest = findQuest(id);
         if (!quest || !box) return;
 
-        var toast = dom.el('button', 'sv-toast');
+        var toast = dom.el('button', kind === 'step' ? 'sv-toast sv-toast-step' : 'sv-toast');
         toast.type = 'button';
         toast.appendChild(dom.el('span', 'sv-toast-mark', '✓'));
-        toast.appendChild(dom.el('span', 'sv-toast-text', SV.i18n.t('toast.complete')));
+        toast.appendChild(dom.el('span', 'sv-toast-text', SV.i18n.t(kind === 'step' ? 'toast.step' : 'toast.complete')));
 
         toast.style.animation = 'svToastIn .2s ease-out, svToastOut .3s ease-in ' +
             Math.max(0, cfg.toastMs - 300) + 'ms forwards';
