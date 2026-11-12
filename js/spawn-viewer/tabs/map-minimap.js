@@ -15,10 +15,10 @@
         c.height = h * tileSize;
         var ctx = c.getContext('2d');
 
-        ctx.fillStyle = '#0c0d12';
+        ctx.fillStyle = '#060a14';
         ctx.fillRect(0, 0, c.width, c.height);
 
-        ctx.fillStyle = '#2a2f40';
+        ctx.fillStyle = '#1b3668';
         var gap = tileSize >= 6 ? 1 : 0;
         for (var y = 0; y < h; y++) {
             for (var x = 0; x < w; x++) {
@@ -36,7 +36,7 @@
         var half = size / 2;
 
         ctx.globalAlpha = marker.ghost ? 0.5 : 1;
-        ctx.fillStyle = 'rgba(10, 11, 16, .82)';
+        ctx.fillStyle = 'rgba(6, 10, 22, .85)';
         ctx.fillRect(cx - half - 2, cy - half - 2, size + 4, size + 4);
 
         var icon = marker.g && marker.g.name ? sprites.iconSync(marker.g, size) : null;
@@ -93,11 +93,11 @@
 
         hits = [];
         SV.spawns.markers().forEach(function (m) {
-            drawMarker(ctx, m, markerSize, tileSize, m.special ? '#e0b84c' : 'rgba(255, 255, 255, .4)', m.special ? 2 : 1);
+            drawMarker(ctx, m, markerSize, tileSize, m.special ? '#dcb85a' : 'rgba(190, 205, 235, .45)', m.special ? 2 : 1);
         });
 
         var player = SV.spawns.playerMarker();
-        if (player) drawMarker(ctx, player, markerSize, tileSize, '#5ec8ff', 2);
+        if (player) drawMarker(ctx, player, markerSize, tileSize, '#8bb8ff', 2);
     }
 
     SV.minimap = { attach: attach, resetCache: resetCache, draw: draw };

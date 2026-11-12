@@ -113,8 +113,8 @@
         var ctx = canvas.getContext('2d');
 
         function drawBlank() {
-            ctx.fillStyle = '#6f7388';
-            ctx.font = Math.round(size * 0.5) + 'px system-ui, sans-serif';
+            ctx.fillStyle = '#5b6174';
+            ctx.font = Math.round(size * 0.5) + 'px serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText('∅', size / 2, size / 2);

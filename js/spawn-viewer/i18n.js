@@ -43,6 +43,11 @@
         setLanguage(list[(list.indexOf(lang()) + 1) % list.length]);
     }
 
+    function languageName(code) {
+        var table = (SV.data.strings || {})[code] || {};
+        return table['lang.name'] || code;
+    }
+
     function onChange(fn) {
         listeners.push(fn);
     }
@@ -112,6 +117,7 @@
         languages: languages,
         setLanguage: setLanguage,
         next: next,
+        languageName: languageName,
         onChange: onChange,
         t: t,
         questTitle: questTitle,

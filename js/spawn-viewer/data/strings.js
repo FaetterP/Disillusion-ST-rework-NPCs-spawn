@@ -5,6 +5,11 @@
 
     SV.data.strings = {
         ru: {
+            'lang.name': 'Русский',
+            'lang.title': 'Язык',
+            'tab.quests': 'Квесты',
+            'tab.map': 'Карта',
+            'close': 'Закрыть',
             'locked': 'Продолжайте искать предметы',
             'group.items': 'Предметы',
             'group.end': 'Концовки',
@@ -27,6 +32,11 @@
             'player': 'Игрок'
         },
         en: {
+            'lang.name': 'English',
+            'lang.title': 'Language',
+            'tab.quests': 'Quests',
+            'tab.map': 'Map',
+            'close': 'Close',
             'locked': 'Keep looking for items',
             'group.items': 'Items',
             'group.end': 'Endings',

@@ -69,7 +69,7 @@
 
     function stepGlyph(state, i) {
         if (state.done[i]) return '✓';
-        if (i === state.current) return '▶';
+        if (i === state.current) return '';
         return '○';
     }
 

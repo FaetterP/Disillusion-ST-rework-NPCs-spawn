@@ -10,6 +10,7 @@
 
         defaultTab: 'map',
 
+        tabOrder: ['quests', 'map'],
         tickMs: 100,
         slowTickEvery: 4,
 
