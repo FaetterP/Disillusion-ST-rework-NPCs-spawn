@@ -18,6 +18,31 @@ Download files here and unpack them into the game folder.
 Green button `Code` → `Download ZIP`  
 ![image](https://github.com/user-attachments/assets/645a6ca9-9a57-4963-a17e-87ba79869a35)
 
+-------------------------------------------------------------------------------------------------------
+
+### Important NPCs
+
+An NPC is important while it still have dialogue you haven't heard, or an unfinished quest needs its.
+
+Important NPCs always stay in the list, so they keep coming back until you're done with them.
+
+The mod stores which dialogues you've heard in your save file. If you install it on an existing save, it doesn't know what you heard earlier, so some NPCs may appear a few times as important until you talk to them again.
+
+If conditions for spawning an event aren't met or the character has run out of dialogues, another event will be spawned instead.
+
+## Map
+
+Press [M].
+
+![map](https://github.com/user-attachments/assets/780615df-615b-4b8d-a94d-f5a1f42c1bdd)
+
+## Quests
+
+Press [J].  
+Tracks every item and endings. They are hidden (`???`) until completed to avoid spoiling.
+
+![quests](https://github.com/user-attachments/assets/529d902d-12e3-4cf2-a5f5-33e7949f4ebf)
+
 ## How spawn works
 
 The game has a large list of events that can occur, each with its own unique number.
@@ -51,27 +76,3 @@ So, sooner or later, all regular events will be used.
 Then the list will reset, and all entities can spawn again.  
 ![pool0](https://github.com/user-attachments/assets/20662c42-b447-47ef-bc98-c010d5ae46a8)
 
--------------------------------------------------------------------------------------------------------
-
-### Important NPCs
-
-An NPC is important while it still have dialogue you haven't heard, or an unfinished quest needs its.
-
-Important NPCs always stay in the list, so they keep coming back until you're done with them.
-
-The mod stores which dialogues you've heard in your save file. If you install it on an existing save, it doesn't know what you heard earlier, so some NPCs may appear a few times as important until you talk to them again.
-
-If conditions for spawning an event aren't met or the character has run out of dialogues, another event will be spawned instead.
-
-## Spawn map
-
-Press [M].
-
-![map](https://github.com/user-attachments/assets/780615df-615b-4b8d-a94d-f5a1f42c1bdd)
-
-## Quests
-
-Press [J].  
-Tracks every item and endings. They are hidden (`???`) until completed to avoid spoiling.
-
-![quests](https://github.com/user-attachments/assets/529d902d-12e3-4cf2-a5f5-33e7949f4ebf)

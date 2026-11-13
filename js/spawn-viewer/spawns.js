@@ -78,19 +78,25 @@
         }).sort(bySpecialThenId);
     }
 
-    function queue() {
-        var pool = game.spawnQueue();
-        if (!pool) return null;
-
-        var counts = {};
-        pool.forEach(function (id) { counts[id] = (counts[id] || 0) + 1; });
-
-        return Object.keys(counts).map(Number).map(function (id) {
+    function listOf(ids, decorate) {
+        if (!ids) return null;
+        return ids.map(function (id) {
             var entry = describe(id);
-            entry.count = counts[id];
-            if (entry.special) entry.locked = !game.isSpawnAvailable(id);
+            decorate(entry);
             return entry;
         }).sort(bySpecialThenId);
+    }
+
+    function pool() {
+        return listOf(game.spawnPool(), function (entry) {
+            if (entry.special) entry.locked = !game.isSpawnAvailable(entry.id);
+        });
+    }
+
+    function waiting() {
+        return listOf(game.waitingSpawns(), function (entry) {
+            entry.spent = true;
+        });
     }
 
     function idsOnMap() {
@@ -140,7 +146,8 @@
     SV.spawns = {
         describe: describe,
         onMap: onMap,
-        queue: queue,
+        pool: pool,
+        waiting: waiting,
         idsOnMap: idsOnMap,
         markers: markers,
         playerMarker: playerMarker

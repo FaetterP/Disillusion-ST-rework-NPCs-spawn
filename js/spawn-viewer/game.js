@@ -70,11 +70,17 @@
         return true;
     }
 
-    function spawnQueue() {
-        if (!hasSpawnPlugin()) return null;
-        if (!Galv.SPAWN.allowedEvents && typeof resetAllowedEvents === 'function') resetAllowedEvents();
-        return Galv.SPAWN.allowedEvents || null;
+    function spawnList(name) {
+        if (!hasSpawnPlugin() || typeof Galv.SPAWN[name] !== 'function') return null;
+        try {
+            return Galv.SPAWN[name]();
+        } catch (err) {
+            return null;
+        }
     }
+
+    function spawnPool()    { return spawnList('availableIds'); }
+    function waitingSpawns() { return spawnList('waitingIds'); }
 
     function activePageImage(eventData) {
         var pages = eventData.pages || [];
@@ -118,7 +124,8 @@
         isImportantSpawn: isImportantSpawn,
         forcedSpawnIds: forcedSpawnIds,
         isSpawnAvailable: isSpawnAvailable,
-        spawnQueue: spawnQueue,
+        spawnPool: spawnPool,
+        waitingSpawns: waitingSpawns,
         activePageImage: activePageImage,
 
         sessionToken: sessionToken,

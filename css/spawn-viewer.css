@@ -159,8 +159,9 @@
 
 .sv-lists { display: flex; flex-direction: column; gap: 10px; min-width: 0; min-height: 0; }
 .sv-sec { display: flex; flex-direction: column; min-height: 0; }
-.sv-sec.sv-here { flex: 0 1 auto; max-height: 42%; }
-.sv-sec.sv-queue { flex: 1 1 0; }
+.sv-sec.sv-here { flex: 0 1 auto; max-height: 30%; }
+.sv-sec.sv-pool { flex: 3 1 0; }
+.sv-sec.sv-waiting { flex: 2 1 0; }
 .sv-sec h3 {
     margin: 0 0 6px; padding: 0 0 3px;
     font-size: 16px; font-weight: normal; letter-spacing: .12em; color: var(--sv-blue-hi);
@@ -187,6 +188,7 @@
 .sv-cell.sv-special .sv-name { color: #f3dd9a; }
 .sv-cell.sv-ghost { opacity: .5; }
 .sv-cell.sv-locked { opacity: .45; border-style: dashed; }
+.sv-cell.sv-spent { opacity: .6; }
 .sv-icon { display: block; width: 36px; height: 36px; image-rendering: pixelated; }
 .sv-name {
     width: 100%; margin-top: 4px; padding: 0 2px; text-align: center;
@@ -216,7 +218,8 @@
 }
 
 @media (max-width: 700px) {
-    .sv-body { grid-template-columns: 1fr; grid-template-rows: minmax(0, 40%) minmax(0, 1fr); }
+    .sv-body { grid-template-columns: 1fr; grid-template-rows: minmax(0, 28%) minmax(0, 1fr); }
+    .sv-sec.sv-here { max-height: 36%; }
     .sv-quests { grid-template-columns: 1fr; grid-template-rows: minmax(0, 34%) minmax(0, 1fr); }
     .sv-head { gap: 8px; }
     .sv-btn { padding: 0 12px; }
