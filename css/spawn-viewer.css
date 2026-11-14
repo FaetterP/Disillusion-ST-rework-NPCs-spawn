@@ -186,6 +186,12 @@
 }
 .sv-cell.sv-special:hover { border-color: var(--sv-gold); }
 .sv-cell.sv-special .sv-name { color: #f3dd9a; }
+.sv-cell.sv-fixed {
+    border-color: var(--sv-silver-lo); background: linear-gradient(180deg, rgba(120, 125, 138, .24), rgba(22, 23, 28, .7));
+    box-shadow: 0 0 0 1px rgba(166, 170, 178, .12);
+}
+.sv-cell.sv-fixed:hover { border-color: var(--sv-silver); }
+.sv-cell.sv-fixed .sv-name { color: var(--sv-silver); }
 .sv-cell.sv-ghost { opacity: .5; }
 .sv-cell.sv-locked { opacity: .45; border-style: dashed; }
 .sv-cell.sv-spent { opacity: .6; }

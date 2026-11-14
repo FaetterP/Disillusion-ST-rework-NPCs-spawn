@@ -42,6 +42,7 @@
         return '#' + entry.id + ' — ' + entry.label +
             (entry.special ? ' (' + t('map.important') + ')' : '') +
             (entry.count > 1 ? ' ×' + entry.count : '') +
+            (entry.fixed ? ' — ' + t('map.fixed') : '') +
             (entry.forced ? ' — ' + t('map.forced') : '') +
             (entry.locked ? ' — ' + t('map.locked') : '') +
             (entry.spent ? ' — ' + t('map.spent') : '') +
@@ -51,6 +52,7 @@
     function makeCell(entry) {
         var cell = el('div', 'sv-cell' +
             (entry.special ? ' sv-special' : '') +
+            (entry.fixed ? ' sv-fixed' : '') +
             (entry.ghost ? ' sv-ghost' : '') +
             (entry.locked ? ' sv-locked' : '') +
             (entry.spent ? ' sv-spent' : ''));
@@ -77,7 +79,7 @@
     function signatureOf(entries) {
         return entries.map(function (d) {
             var g = d.g;
-            return [d.id, d.count, d.ghost ? 1 : 0, d.special ? 1 : 0, d.locked ? 1 : 0, d.forced ? 1 : 0,
+            return [d.id, d.count, d.ghost ? 1 : 0, d.special ? 1 : 0, d.locked ? 1 : 0, d.forced ? 1 : 0, d.fixed ? 1 : 0,
                 g ? [g.name, g.index, g.dir, g.pattern].join(':') : ''].join('|');
         }).join(',');
     }

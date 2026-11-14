@@ -38,6 +38,25 @@
         });
     }
 
+    function fixedEventIds() {
+        var table = (SV.data && SV.data.fixedEvents) || {};
+        var list = table[$gameMap.mapId()];
+        return Array.isArray(list) ? list : [];
+    }
+
+    function fixedEvents() {
+        var seen = {};
+        return fixedEventIds().filter(function (id) {
+            if (seen[id]) return false;
+            seen[id] = true;
+            return true;
+        }).map(function (id) {
+            return $gameMap.event(id);
+        }).filter(function (event) {
+            return !!event && !event.isSpawnEvent && !event._erased;
+        });
+    }
+
     function spawnIdOf(event) {
         return event._spawnEventId;
     }
@@ -119,6 +138,8 @@
 
         hasSpawnPlugin: hasSpawnPlugin,
         spawnEvents: spawnEvents,
+        fixedEventIds: fixedEventIds,
+        fixedEvents: fixedEvents,
         spawnIdOf: spawnIdOf,
         spawnEventData: spawnEventData,
         isImportantSpawn: isImportantSpawn,

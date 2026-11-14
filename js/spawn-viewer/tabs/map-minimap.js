@@ -44,13 +44,21 @@
 
         ctx.lineWidth = ringWidth;
         ctx.strokeStyle = ringColor;
+        if (marker.fixed) ctx.setLineDash([4, 3]);
         ctx.strokeRect(cx - half - 2, cy - half - 2, size + 4, size + 4);
+        ctx.setLineDash([]);
         ctx.globalAlpha = 1;
 
         hits.push({
             cx: cx, cy: cy, r: half + 2,
-            label: marker.id ? '#' + marker.id + ' — ' + marker.label : marker.label
+            label: (marker.id ? '#' + marker.id + ' — ' + marker.label : marker.label) +
+                (marker.fixed ? ' (' + SV.i18n.t('map.fixed') + ')' : '')
         });
+    }
+
+    function ringColorOf(marker) {
+        if (marker.fixed) return '#9096a3';
+        return marker.special ? '#dcb85a' : 'rgba(190, 205, 235, .45)';
     }
 
     function attach(target) {
@@ -93,7 +101,7 @@
 
         hits = [];
         SV.spawns.markers().forEach(function (m) {
-            drawMarker(ctx, m, markerSize, tileSize, m.special ? '#dcb85a' : 'rgba(190, 205, 235, .45)', m.special ? 2 : 1);
+            drawMarker(ctx, m, markerSize, tileSize, ringColorOf(m), m.special || m.fixed ? 2 : 1);
         });
 
         var player = SV.spawns.playerMarker();

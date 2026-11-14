@@ -4,8 +4,8 @@
     var game = SV.game;
     var sprites = SV.sprites;
 
-    function labelFor(id, eventData, g) {
-        var custom = SV.data.npcNames[id];
+    function labelFor(id, eventData, g, isFixed) {
+        var custom = isFixed ? null : SV.data.npcNames[id];
         if (custom) return custom;
 
         var editorName = eventData && eventData.name ? String(eventData.name).trim() : '';
@@ -55,9 +55,36 @@
             special: game.isImportantSpawn(id),
             locked: false,
             forced: false,
+            fixed: false,
             label: labelFor(id, data, g),
             count: 1
         };
+    }
+
+    function describeFixed(event) {
+        var id = event.eventId();
+        var data = event.event();
+        var g = liveGraphic(event);
+        var ghost = false;
+        if (!sprites.isDrawable(g)) {
+            ghost = true;
+            g = data ? firstGraphic(data) : null;
+        }
+        return {
+            id: id,
+            g: g,
+            ghost: ghost,
+            special: false,
+            locked: false,
+            forced: false,
+            fixed: true,
+            label: labelFor(id, data, g, true),
+            count: 1
+        };
+    }
+
+    function fixedEntries() {
+        return game.fixedEvents().map(describeFixed).sort(function (a, b) { return a.id - b.id; });
     }
 
     function onMap() {
@@ -72,10 +99,11 @@
         });
 
         var forced = game.forcedSpawnIds();
-        return Object.keys(groups).map(Number).map(function (id) {
+        var spawned = Object.keys(groups).map(Number).map(function (id) {
             groups[id].forced = forced.indexOf(id) > -1;
             return groups[id];
         }).sort(bySpecialThenId);
+        return spawned.concat(fixedEntries());
     }
 
     function listOf(ids, decorate) {
@@ -114,16 +142,21 @@
         };
     }
 
+    function withPosition(entry, event) {
+        var pos = positionOf(event);
+        entry.x = pos.x;
+        entry.y = pos.y;
+        return entry;
+    }
+
     function markers() {
-        var out = [];
-        game.spawnEvents().forEach(function (event) {
-            var entry = describe(game.spawnIdOf(event), liveGraphic(event));
-            var pos = positionOf(event);
-            entry.x = pos.x;
-            entry.y = pos.y;
-            out.push(entry);
+        var fixed = game.fixedEvents().map(function (event) {
+            return withPosition(describeFixed(event), event);
         });
-        return out.sort(function (a, b) { return bySpecialThenId(b, a); });
+        var spawned = game.spawnEvents().map(function (event) {
+            return withPosition(describe(game.spawnIdOf(event), liveGraphic(event)), event);
+        }).sort(function (a, b) { return bySpecialThenId(b, a); });
+        return fixed.concat(spawned);
     }
 
     function playerMarker() {
