@@ -17,6 +17,15 @@
         toastMs: 5000,
         toastCheckMs: 500,
 
+        terrain: {
+            resolution: 900,
+            belowTolerance: 0.6,
+            lowObstacle: 0.75,
+            charTolerance: 0.6,
+            wallShade: 0.45,
+            blockedShade: 0.4
+        },
+
         pacifistOffSwitch: 27,
 
         questGroups: [

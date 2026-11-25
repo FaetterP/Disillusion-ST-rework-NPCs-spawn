@@ -6,38 +6,17 @@
     var sprites = SV.sprites;
 
     var canvas = null;
-    var terrain = null; // { key, canvas }
     var hits = [];
 
-    function buildTerrain(w, h, tileSize) {
-        var c = document.createElement('canvas');
-        c.width = w * tileSize;
-        c.height = h * tileSize;
-        var ctx = c.getContext('2d');
-
-        ctx.fillStyle = '#060a14';
-        ctx.fillRect(0, 0, c.width, c.height);
-
-        ctx.fillStyle = '#1b3668';
-        var gap = tileSize >= 6 ? 1 : 0;
-        for (var y = 0; y < h; y++) {
-            for (var x = 0; x < w; x++) {
-                if (game.isTilePassable(x, y)) {
-                    ctx.fillRect(x * tileSize, y * tileSize, tileSize - gap, tileSize - gap);
-                }
-            }
-        }
-        return c;
-    }
-
-    function drawMarker(ctx, marker, size, tileSize, ringColor, ringWidth) {
-        var cx = 20 + (marker.x + 0.5) * tileSize;
-        var cy = 20 + (marker.y + 0.5) * tileSize;
+    function drawMarker(ctx, marker, size, tileSize, pad, ringColor, ringWidth) {
+        var cx = pad + (marker.x + 0.5) * tileSize;
+        var cy = pad + (marker.y + 0.5) * tileSize;
         var half = size / 2;
+        var ring = Math.max(2, Math.round(size / 14));
 
         ctx.globalAlpha = marker.ghost ? 0.5 : 1;
         ctx.fillStyle = 'rgba(6, 10, 22, .85)';
-        ctx.fillRect(cx - half - 2, cy - half - 2, size + 4, size + 4);
+        ctx.fillRect(cx - half - ring, cy - half - ring, size + ring * 2, size + ring * 2);
 
         var icon = marker.g && marker.g.name ? sprites.iconSync(marker.g, size) : null;
         if (icon) ctx.drawImage(icon, cx - half, cy - half);
@@ -45,12 +24,12 @@
         ctx.lineWidth = ringWidth;
         ctx.strokeStyle = ringColor;
         if (marker.fixed) ctx.setLineDash([4, 3]);
-        ctx.strokeRect(cx - half - 2, cy - half - 2, size + 4, size + 4);
+        ctx.strokeRect(cx - half - ring, cy - half - ring, size + ring * 2, size + ring * 2);
         ctx.setLineDash([]);
         ctx.globalAlpha = 1;
 
         hits.push({
-            cx: cx, cy: cy, r: half + 2,
+            cx: cx, cy: cy, r: half + ring,
             label: (marker.id ? '#' + marker.id + ' — ' + marker.label : marker.label) +
                 (marker.fixed ? ' (' + SV.i18n.t('map.fixed') + ')' : '')
         });
@@ -79,35 +58,52 @@
     }
 
     function resetCache() {
-        terrain = null;
+        SV.terrain.reset();
+    }
+
+    function layoutFor(w, h) {
+        var res = cfg.terrain.resolution;
+        var pad = Math.round(res / 24);
+        var usable = res - 2 * pad;
+        var tileSize = Math.max(2, Math.min(SV.terrain.maxTileSize(), Math.floor(Math.min(usable / w, usable / h))));
+        return { pad: pad, tileSize: tileSize };
+    }
+
+    function markerSizeFor(cw, ch) {
+        return Math.max(22, Math.min(56, Math.round(26 * Math.max(cw, ch) / 460)));
     }
 
     function draw() {
         var w = game.mapWidth(), h = game.mapHeight();
-        var usable = 480 - 2 * 20;
-        var tileSize = Math.max(2, Math.floor(Math.min(usable / w, usable / h)));
-        var markerSize = Math.max(22, Math.min(32, tileSize));
+        var ready = SV.terrain.isAvailable();
+        var lay = layoutFor(w, h);
+        var pad = lay.pad, tileSize = lay.tileSize;
 
-        var cw = w * tileSize + 2 * 20;
-        var ch = h * tileSize + 2 * 20;
+        var cw = w * tileSize + 2 * pad;
+        var ch = h * tileSize + 2 * pad;
         if (canvas.width !== cw || canvas.height !== ch) { canvas.width = cw; canvas.height = ch; }
-
-        var key = game.mapId() + '|' + tileSize;
-        if (!terrain || terrain.key !== key) terrain = { key: key, canvas: buildTerrain(w, h, tileSize) };
 
         var ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, cw, ch);
-        ctx.drawImage(terrain.canvas, 20, 20);
+        var ground = ready ? SV.terrain.render(tileSize) : null;
+        if (ground) ctx.drawImage(ground, pad, pad);
+
+        var markerSize = markerSizeFor(cw, ch);
 
         hits = [];
         SV.spawns.markers().forEach(function (m) {
-            drawMarker(ctx, m, markerSize, tileSize, ringColorOf(m), m.special || m.fixed ? 2 : 1);
+            if (!SV.terrain.isOnLevel(m.z)) return;
+            drawMarker(ctx, m, markerSize, tileSize, pad, ringColorOf(m), m.special || m.fixed ? 2 : 1);
         });
 
         var player = SV.spawns.playerMarker();
-        if (player) drawMarker(ctx, player, markerSize, tileSize, '#8bb8ff', 2);
+        if (player) drawMarker(ctx, player, markerSize, tileSize, pad, '#8bb8ff', 2);
     }
 
-    SV.minimap = { attach: attach, resetCache: resetCache, draw: draw };
+    SV.minimap = {
+        attach: attach,
+        resetCache: resetCache,
+        draw: draw
+    };
 
 })(window.SpawnViewer = window.SpawnViewer || {});

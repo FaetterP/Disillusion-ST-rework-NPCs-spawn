@@ -146,6 +146,7 @@
         var pos = positionOf(event);
         entry.x = pos.x;
         entry.y = pos.y;
+        entry.z = game.charHeight(event);
         return entry;
     }
 

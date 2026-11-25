@@ -24,6 +24,51 @@
         }
     }
 
+    function tileWidth() {
+        try { return $gameMap.tileWidth() || 48; } catch (err) { return 48; }
+    }
+
+    function tilesetId() {
+        try { return $gameMap.tilesetId(); } catch (err) { return 0; }
+    }
+
+    function tilesetName(index) {
+        try {
+            var tileset = $gameMap.tileset();
+            return tileset && tileset.tilesetNames ? (tileset.tilesetNames[index] || '') : '';
+        } catch (err) {
+            return '';
+        }
+    }
+
+    function loadTileset(name) {
+        return ImageManager.loadTileset(name);
+    }
+
+    function mz3d() {
+        var m = window.mz3d;
+        if (!m || typeof m.getTileData !== 'function' || typeof m.getTileConfig !== 'function' ||
+            typeof m.getTileRects !== 'function' || typeof m.getRampData !== 'function') return null;
+        return m;
+    }
+
+    function mz3dActive() {
+        var m = mz3d();
+        if (!m) return false;
+        try {
+            return !(typeof m.isDisabled === 'function' && m.isDisabled());
+        } catch (err) {
+            return false;
+        }
+    }
+
+    function charHeight(character) {
+        var spr = character && character.mv3d_sprite;
+        if (!spr) return null;
+        var z = (typeof spr.platformHeight === 'number') ? spr.platformHeight : spr.z;
+        return (typeof z === 'number' && isFinite(z)) ? z : null;
+    }
+
     function player() {
         return (typeof $gamePlayer !== 'undefined' && $gamePlayer) ? $gamePlayer : null;
     }
@@ -134,6 +179,13 @@
         mapWidth: mapWidth,
         mapHeight: mapHeight,
         isTilePassable: isTilePassable,
+        tileWidth: tileWidth,
+        tilesetId: tilesetId,
+        tilesetName: tilesetName,
+        loadTileset: loadTileset,
+        mz3d: mz3d,
+        mz3dActive: mz3dActive,
+        charHeight: charHeight,
         player: player,
 
         hasSpawnPlugin: hasSpawnPlugin,
