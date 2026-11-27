@@ -120,11 +120,6 @@
         return false;
     }
 
-    function forcedSpawnIds() {
-        var visit = hasSpawnPlugin() ? Galv.SPAWN.visit : null;
-        return (visit && visit.mapId === $gameMap.mapId() && visit.forced) ? visit.forced : [];
-    }
-
     function isSpawnAvailable(id) {
         try {
             if (hasSpawnPlugin() && typeof Galv.SPAWN.isAvailable === 'function') {
@@ -195,7 +190,6 @@
         spawnIdOf: spawnIdOf,
         spawnEventData: spawnEventData,
         isImportantSpawn: isImportantSpawn,
-        forcedSpawnIds: forcedSpawnIds,
         isSpawnAvailable: isSpawnAvailable,
         spawnPool: spawnPool,
         waitingSpawns: waitingSpawns,

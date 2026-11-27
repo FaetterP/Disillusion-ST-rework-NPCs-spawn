@@ -54,7 +54,6 @@
             ghost: ghost,
             special: game.isImportantSpawn(id),
             locked: false,
-            forced: false,
             fixed: false,
             label: labelFor(id, data, g),
             count: 1
@@ -76,7 +75,6 @@
             ghost: ghost,
             special: false,
             locked: false,
-            forced: false,
             fixed: true,
             label: labelFor(id, data, g, true),
             count: 1
@@ -98,9 +96,7 @@
             groups[id].count++;
         });
 
-        var forced = game.forcedSpawnIds();
         var spawned = Object.keys(groups).map(Number).map(function (id) {
-            groups[id].forced = forced.indexOf(id) > -1;
             return groups[id];
         }).sort(bySpecialThenId);
         return spawned.concat(fixedEntries());
