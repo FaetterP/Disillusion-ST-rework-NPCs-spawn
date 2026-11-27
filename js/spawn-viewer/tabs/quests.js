@@ -107,7 +107,6 @@
         row.appendChild(el('span', 'sv-glyph', stepGlyph(state, i)));
 
         var text = el('div', 'sv-stext', stepText(quest, state.keys[i], states, state.done[i]));
-        if (step.mode) text.appendChild(el('span', 'sv-tag', t('quest.mode.' + step.mode)));
         if (!state.done[i] && step.npcs && step.npcs.some(function (id) { return idsHere[id]; })) {
             text.appendChild(el('span', 'sv-tag near', t('quest.here')));
         }
